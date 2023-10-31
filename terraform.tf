@@ -1,6 +1,6 @@
 resource "aws_security_group" "ec2_computer_sg" {
   name        = "ec2_computer_sg_${var.aws_region}_${var.profile}"
-  description = "Allow connection to ec2 computer in ${var.aws_region} "
+  description = "Allow connection to ec2 computer in ${var.aws_region}"
 
   ingress {
     from_port   = 22
@@ -8,6 +8,17 @@ resource "aws_security_group" "ec2_computer_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
     description = "SSH"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "ec2_computer_${var.aws_region}_${var.profile}"
   }
 }
 
@@ -38,8 +49,13 @@ data "aws_ami" "centos" {
 resource "aws_instance" "ec2_computer" {
   ami = data.aws_ami.centos.id
   instance_type = var.web_ec2_type
+  vpc_security_group_ids = [aws_security_group.ec2_computer_sg.id]
+  key_name = var.key_name
 
-
+  tags = {
+    Name = "ec2_computer_${var.aws_region}_${var.profile}",
+    System = "${var.web_ec2_type}",
+  }
 
   root_block_device {
     delete_on_termination = "true"
@@ -52,4 +68,8 @@ output "instance_public_ip_addr" {
 
 output "instance_type" {
   value = aws_instance.ec2_computer.instance_type
+}
+
+output "vpc_id" {
+  value = aws_security_group.ec2_computer_sg.vpc_id
 }
