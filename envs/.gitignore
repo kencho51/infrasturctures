@@ -1,0 +1,4 @@
+# Ignore everything inside envs dirs
+*
+# Except this file
+!.gitignore

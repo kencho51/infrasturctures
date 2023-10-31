@@ -77,7 +77,7 @@ echo "aws_region = \"$AWS_REGION\"" >> terraform.tfvars
 echo "web_ec2_type = \"$web_ec2_type\"" >> terraform.tfvars
 echo "profile = \"$profile\"" >> terraform.tfvars
 
-cp ../terraform.tf .
-cp ../input.tf .
+cp ../../terraform.tf .
+cp ../../input.tf .
 
 terraform init
