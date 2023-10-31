@@ -1,3 +1,16 @@
+resource "aws_security_group" "ec2_computer_sg" {
+  name        = "ec2_computer_sg_${var.aws_region}_${var.profile}"
+  description = "Allow connection to ec2 computer in ${var.aws_region} "
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "SSH"
+  }
+}
+
 provider "aws" {
   region                   = var.aws_region
   shared_config_files      = ["~/.aws/config"]
