@@ -29,12 +29,12 @@ provider "aws" {
   profile                  = var.profile
 }
 
-data "aws_ami" "centos" {
+data "aws_ami" "ubuntu" {
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["CentOS Stream 8 x86_64 20230530"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20231025"]
   }
 
   filter {
@@ -42,12 +42,12 @@ data "aws_ami" "centos" {
     values = ["hvm"]
   }
 
-  owners = ["125523088429"]
+  owners = ["099720109477"]
 }
 
 
 resource "aws_instance" "ec2_computer" {
-  ami = data.aws_ami.centos.id
+  ami = data.aws_ami.ubuntu.id
   instance_type = var.web_ec2_type
   vpc_security_group_ids = [aws_security_group.ec2_computer_sg.id]
   key_name = var.key_name
