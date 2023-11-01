@@ -52,6 +52,7 @@ resource "aws_instance" "ec2_computer" {
   vpc_security_group_ids = [aws_security_group.ec2_computer_sg.id]
   key_name = var.key_name
   user_data = "${file("setup_server.sh")}"
+  ebs_optimized = true
 
   tags = {
     Name = "ec2_computer_${var.aws_region}_${var.profile}",
@@ -59,6 +60,8 @@ resource "aws_instance" "ec2_computer" {
   }
 
   root_block_device {
+    volume_size = 30
+    volume_type = "gp3"
     delete_on_termination = "true"
   }
 }
