@@ -51,6 +51,7 @@ resource "aws_instance" "ec2_computer" {
   instance_type = var.web_ec2_type
   vpc_security_group_ids = [aws_security_group.ec2_computer_sg.id]
   key_name = var.key_name
+  user_data = "${file("setup_server.sh")}"
 
   tags = {
     Name = "ec2_computer_${var.aws_region}_${var.profile}",

@@ -79,5 +79,6 @@ echo "profile = \"$profile\"" >> terraform.tfvars
 
 cp ../../terraform.tf .
 cp ../../input.tf .
+cp ../../setup_server.sh .
 
 terraform init
