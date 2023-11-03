@@ -47,6 +47,7 @@ data "aws_ami" "ubuntu" {
 
 
 resource "aws_instance" "ec2_computer" {
+  count = "${var.instance_count}"
   ami = data.aws_ami.ubuntu.id
   instance_type = var.web_ec2_type
   vpc_security_group_ids = [aws_security_group.ec2_computer_sg.id]
@@ -55,7 +56,7 @@ resource "aws_instance" "ec2_computer" {
   ebs_optimized = true
 
   tags = {
-    Name = "ec2_computer_${var.aws_region}_${var.profile}",
+    Name = "ec2_computer_${var.aws_region}_${var.profile}-${count.index}",
     System = "${var.web_ec2_type}",
   }
 
@@ -67,11 +68,11 @@ resource "aws_instance" "ec2_computer" {
 }
 
 output "instance_public_ip_addr" {
-  value = aws_instance.ec2_computer.public_ip
+  value = aws_instance.ec2_computer.*.public_ip
 }
 
 output "instance_type" {
-  value = aws_instance.ec2_computer.instance_type
+  value = aws_instance.ec2_computer.*.instance_type
 }
 
 output "vpc_id" {

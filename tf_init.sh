@@ -23,6 +23,10 @@ while [[ $# -gt 0 ]]; do
         profile=$2
         shift 2
         ;;
+    --instance-count)
+        instance_count=$2
+        shift 2
+        ;;
     *)
         echo "Invalid option: $1 in"
         echo $call_str
@@ -47,12 +51,17 @@ if [ -z $profile ];then
   read -p "You need to specify an AWS profile: " profile
 fi
 
+if [ -z $instance_count ];then
+  read -p "How many identical ec2 instane to create: " instance_count
+fi
+
 echo ""
 echo "Current directory: $(pwd)"
 echo "Path to SSH key: $aws_ssh_key"
 echo "Region: $AWS_REGION"
 echo "Web EC2 Type: $web_ec2_type"
 echo "AWS profile: $profile"
+echo "Number of instance to create:" $instance_count
 echo ""
 
 read -p "Do you want to continue (y/n)?" choice
@@ -76,6 +85,7 @@ echo "key_name = \"$key_name\"" > terraform.tfvars
 echo "aws_region = \"$AWS_REGION\"" >> terraform.tfvars
 echo "web_ec2_type = \"$web_ec2_type\"" >> terraform.tfvars
 echo "profile = \"$profile\"" >> terraform.tfvars
+echo "instance_count = \"$instance_count\"" >> terraform.tfvars
 
 cp ../../terraform.tf .
 cp ../../input.tf .
